@@ -1,55 +1,91 @@
 def depositar(valor, saldo, depositos):
-    
-    if valor > 0.0:
+    if valor > 0:
         saldo += valor
         depositos.append(valor)
-        return saldo
-        
+        print(f"R$ {valor:.2f} depositado")
     else:
-        return False 
+        print("Valor informado fora do padrão.")
+    
+    return saldo
 
-def extrato(saldo, depositos):
-    deposito_extrato = f""
+def sacar(*, valor, saldo, saques, limite):
+    if len(saques) >= 3:
+        print("Numero de saque exedidos no dia.")
+    elif valor <= 0:
+        print("Valor menor igual a zero")
+    elif valor > limite:
+        print("Valor acima do limite.")
+    elif valor > saldo:
+        print("Saque não permite saldo negativo")
+    else:
+        saldo -= valor
+        saques.append(valor)
+        print("Saque realizado com sucesso!")
+    
+    return saldo
+    
+
+
+def extrato(saldo, depositos, saques):
+    ext_dep = ""
+    ext_saq = ""
+    
     for deposito in depositos:
-        deposito_extrato = f"Deposito(s): {deposito:10.2f}\n"
+        ext_dep = ext_dep + f"Depósito(s) (+) R$ {deposito:.2f}\n    "
+    
+    for saque in saques:
+        ext_saq = ext_saq + f"Saque(s) (-) R$ {saque:.2f}\n    "
 
-    extrato =f"""
-    ####################
-    ##### EXTRATO ######
-    {deposito_extrato}
-
-    SALDO: {saldo:10.2f}
-    ####################
-
+    extrato = (
+    f"""
+    ######### Extrato ###########
+    {ext_dep}
+    {ext_saq}
+    Saldo: R$ {saldo:.2f}
+    #############################
     """
-    return extrato
+           )
+    print(extrato)
+
+
+
+def menu():
+    menu = (
+    f"""
+    ########## MENU ##########
+    Escoha uma opção:
+    (d)    Depositar
+    (s)    Sacar
+    (e)    Extrato
+    (q)    Sair
+    ###########################
+     => """)
+    escolha = input(menu)
+    return escolha.lower()
 
 def main():
-    menu = (
-          f"""
-            #### MENU ####
-            Escolha umas das opções:
-            (d) Depositar
-            (e) Extrato
-            (q) Sair
-            => """
-            )
-
-    saldo = 150
+    saldo = 0.0
     depositos = []
-
-    while True:
-
-        op = input(menu).lower()
-        if op == "d":
-            valor = float(input("Digite o valor do depósito: "))
-            if depositar(valor, saldo, depositos):
-                print(f"R$ {valor:.2} Depositado")
-            else:
-                print("Não depositamos valores negativos.")
-        
-        else:
-            print("Opção Inválida!!")
+    saques = []
+    limite = 500.0
     
+    
+    while True:
+        op = menu()
+        if op == 'd':
+            valor = float(input("Informe o valor do depósito: "))
+            saldo = depositar(valor, saldo, depositos)
+        elif op == 'e':
+            extrato(saldo, depositos, saques)
+        elif op == "s":
+            valor = float(input("Digita o valor a sacar: "))
+            saldo = sacar(valor=valor, saldo=saldo,saques=saques, limite=limite)
+
+        else:
+            break
+
+            
+
+            
 
 main()
