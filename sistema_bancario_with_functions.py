@@ -47,6 +47,30 @@ def extrato(saldo, depositos, saques):
            )
     print(extrato)
 
+# Criar Usuário
+def criar_usuario():
+    
+    cpf = input("Digite o CPF: ")
+    nome = input("Digite o nome: ")
+    endereco = input("Digite o endereco: ")
+    data_nascimento = input("Data de Nascimento: ")
+    conta = dict()
+
+    dicionario = {
+            'cpf': cpf,
+            'nome': nome,
+            'endereco': endereco,
+            'data_nascimento': data_nascimento,
+            'conta':conta
+            }
+    return dicionario
+
+def criar_conta():
+    pass
+
+
+       
+
 
 
 def menu():
@@ -57,6 +81,8 @@ def menu():
     (d)    Depositar
     (s)    Sacar
     (e)    Extrato
+    (c)    Criar Conta
+    (u)    Criar Usuário
     (q)    Sair
     ###########################
      => """)
@@ -68,6 +94,8 @@ def main():
     depositos = []
     saques = []
     limite = 500.0
+    clientes = []
+    contas = []
     
     
     while True:
@@ -80,7 +108,11 @@ def main():
         elif op == "s":
             valor = float(input("Digita o valor a sacar: "))
             saldo = sacar(valor=valor, saldo=saldo,saques=saques, limite=limite)
-
+        elif op == 'u':
+            clientes.append(criar_usuario())
+        elif op == 'c':
+            contas.append(criar_conta())
+        
         else:
             break
 
