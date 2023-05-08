@@ -48,29 +48,66 @@ def extrato(saldo, depositos, saques):
     print(extrato)
 
 # Criar Usuário
-def criar_usuario():
+def criar_usuario(usuarios):
     
     cpf = input("Digite o CPF: ")
+    
+    if verifica_usuario(usuarios, cpf):
+        print("usuário já existe!")
+        return False
+
+
+
     nome = input("Digite o nome: ")
     endereco = input("Digite o endereco: ")
     data_nascimento = input("Data de Nascimento: ")
-    conta = dict()
 
     dicionario = {
             'cpf': cpf,
             'nome': nome,
             'endereco': endereco,
             'data_nascimento': data_nascimento,
-            'conta':conta
             }
     return dicionario
 
-def criar_conta():
-    pass
+def criar_conta(usuarios, agencia, numero_contas):
+    cpf = input("Digite o CPF para a conta: ")
+    if not verifica_usuario(usuarios, cpf):
+        print("Cliente não existe, tente outro cpf!")
+        return False
+
+    conta = {
+            'cpf': cpf,
+            'agencia':agencia,
+            'conta_corrente': numero_contas
+            }
+    return conta
 
 
-       
 
+
+def verifica_usuario(usuarios, cpf):
+
+    for i in usuarios:
+        if i['cpf'] == cpf:
+            return True
+
+    return False
+
+def lista_contas(contas):
+    lista_contas=''
+    for i in contas:
+        lista_contas += f"\n\tAgência: {i['agencia']} Nº Conta: {i['conta_corrente']} CPF: {i['cpf']}    "
+    
+    listar = (
+    f"""
+    ##############################################
+               * Contas Corrente *
+    {lista_contas}
+    ##############################################
+    """
+    )
+    print(listar)
 
 
 def menu():
@@ -83,6 +120,7 @@ def menu():
     (e)    Extrato
     (c)    Criar Conta
     (u)    Criar Usuário
+    (l)    Listar Contas
     (q)    Sair
     ###########################
      => """)
@@ -96,8 +134,10 @@ def main():
     limite = 500.0
     clientes = []
     contas = []
-    
-    
+    numero_contas = 1 
+    AGENCIA = '0001'
+
+
     while True:
         op = menu()
         if op == 'd':
@@ -109,9 +149,17 @@ def main():
             valor = float(input("Digita o valor a sacar: "))
             saldo = sacar(valor=valor, saldo=saldo,saques=saques, limite=limite)
         elif op == 'u':
-            clientes.append(criar_usuario())
+            cliente = criar_usuario(clientes)
+            if cliente:
+                clientes.append(cliente)
+
         elif op == 'c':
-            contas.append(criar_conta())
+            conta = criar_conta(clientes, AGENCIA , numero_contas)
+            if conta:
+                contas.append(conta)
+                numero_contas += 1
+        elif op == 'l':
+            lista_contas(contas)
         
         else:
             break
