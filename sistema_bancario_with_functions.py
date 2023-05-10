@@ -160,9 +160,11 @@ def main():
                 numero_contas += 1
         elif op == 'l':
             lista_contas(contas)
-        
-        else:
+        elif op == 'q':
+            print("Bye! Bye!")
             break
+        else:
+            print("*** Por favor digite um opção válida ***") 
 
             
 
